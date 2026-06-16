@@ -10,12 +10,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ai-sdk/groq": "^3.0.41",
     "@google/generative-ai": "^0.24.1",
+    "ai": "^6.0.205",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "eventsource-parser": "^3.1.0",
     "express": "^5.2.1",
-    "groq-sdk": "^1.2.1",
     "multer": "^2.1.1",
     "pdfjs-dist": "^6.0.227",
     "playwright": "^1.60.0"

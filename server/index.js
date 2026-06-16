@@ -3,7 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const multer = require('multer');
-const Groq = require('groq-sdk');
+const { generateText } = require('ai');
+const { groq } = require('@ai-sdk/groq');
 
 const { extractProfileFromPDF } = require('./pdfParser');
 const { scrapeFormFields } = require('./formScraper');
@@ -16,7 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 const upload = multer({ storage: multer.memoryStorage() });
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 // SSE stream endpoint
 app.get('/stream', (req, res) => {
@@ -80,12 +80,11 @@ Rules:
 - For dropdowns, value must exactly match one of the available options
 - Return ONLY JSON, no explanation, no markdown`;
 
-    const response = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'user', content: prompt }],
+    const { text } = await generateText({
+      model: groq('llama-3.3-70b-versatile'),
+      prompt,
     });
 
-    const text = response.choices[0].message.content;
     const clean = text.replace(/```json|```/g, '').trim();
     const fillPlan = JSON.parse(clean);
 
